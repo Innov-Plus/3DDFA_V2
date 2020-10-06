@@ -95,19 +95,16 @@ class TDDFA(object):
             print(img_ori.shape)
 
 
-            img = cv2.resize(img, dsize=(self.size, self.size), interpolation=cv2.INTER_LINEAR)
-
-            img = img.transpose((2, 0, 1))
-
-            with open("img_transpose_py.txt", "w") as f:
-                for i in range(img.shape[0]):
-                    for j in range(img.shape[1]):
-                        for k in range(img.shape[2]):
-                            f.write(str(img[i, j, k]))
-                            f.write("\n")
-            
+            img = cv2.resize(img, dsize=(self.size, self.size), interpolation=cv2.INTER_LINEAR)            
 
             inp = self.transform(img).unsqueeze(0)
+
+            with open("inp_py.txt", "w") as f:
+                for i in range(inp.shape[1]):
+                    for j in range(inp.shape[2]):
+                        for k in range(inp.shape[3]):
+                            f.write("{:.6f}".format(float(inp[0, i, j, k])))
+                            f.write("\n")
 
             if self.gpu_mode:
                 inp = inp.cuda(device=self.gpu_id)
@@ -121,8 +118,8 @@ class TDDFA(object):
                 param = self.model(inp)
 
             param = param.squeeze().cpu().numpy().flatten().astype(np.float32)
+            print('output', param)
             param = param * self.param_std + self.param_mean  # re-scale
-            # print('output', param)
             param_lst.append(param)
 
         return param_lst, roi_box_lst
