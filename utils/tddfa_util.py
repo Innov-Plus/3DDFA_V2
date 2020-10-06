@@ -36,6 +36,13 @@ def str2bool(v):
 def load_model(model, checkpoint_fp):
     checkpoint = torch.load(checkpoint_fp, map_location=lambda storage, loc: storage)['state_dict']
     model_dict = model.state_dict()
+    # # Print model's state_dict
+    # print("Model's state_dict:")
+    # for param_tensor in model_dict:
+    #     print(param_tensor, "\t", model_dict[param_tensor].size())
+
+    # # torch.save(model_dict, "test.pt")
+
     # because the model is trained by multiple gpus, prefix module should be removed
     for k in checkpoint.keys():
         kc = k.replace('module.', '')
@@ -45,6 +52,10 @@ def load_model(model, checkpoint_fp):
             model_dict[kc.replace('_param', '')] = checkpoint[k]
 
     model.load_state_dict(model_dict)
+
+    # model_scripted = torch.jit.script(model)
+    # model_scripted.save('mb05_120x120.pt')
+
     return model
 
 

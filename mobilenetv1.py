@@ -27,27 +27,26 @@ class MobileNetV1(nn.Module):
                 )
 
         self.model = nn.Sequential(
-            conv_bn(ch_in, 32, 2),
+            conv_bn(ch_in, 16, 2),
+            conv_dw(16, 32, 1),
             conv_dw(32, 64, 1),
-            conv_dw(64, 128, 2),
+            conv_dw(64, 64, 2),
+            conv_dw(64, 64, 1),
+            conv_dw(64, 64, 2),
+            conv_dw(64, 128, 1),
             conv_dw(128, 128, 1),
-            conv_dw(128, 256, 2),
-            conv_dw(256, 256, 1),
-            conv_dw(256, 512, 2),
-            conv_dw(512, 512, 1),
-            conv_dw(512, 512, 1),
-            conv_dw(512, 512, 1),
-            conv_dw(512, 512, 1),
-            conv_dw(512, 512, 1),
-            conv_dw(512, 1024, 2),
-            conv_dw(1024, 1024, 1),
+            conv_dw(128, 128, 1),
+            conv_dw(128, 128, 1),
+            conv_dw(128, 256, 1),
+            conv_dw(256, 256, 2),
+            conv_dw(256, 62, 1),
             nn.AdaptiveAvgPool2d(1)
         )
-        self.fc = nn.Linear(1024, n_classes)
+        self.fc = nn.Linear(62, n_classes)
 
     def forward(self, x):
         x = self.model(x)
-        x = x.view(-1, 1024)
+        x = x.view(-1, 62)
         x = self.fc(x)
         return x
 
@@ -56,7 +55,7 @@ if __name__=='__main__':
     model = MobileNetV1(ch_in=3, n_classes=1000)
     # summary(model, input_size=(3, 224, 224), device='cpu')
 
-    x = torch.randn(1, 3, 224, 224, requires_grad=True)
+    x = torch.randn(1, 3, 120, 120, requires_grad=True)
 		
     traced_model = torch.jit.trace(model, x)
     torch.jit.save(traced_model, "mobilenetV1.pt")
