@@ -97,7 +97,9 @@ class TDDFA(object):
 
             img = cv2.resize(img, dsize=(self.size, self.size), interpolation=cv2.INTER_LINEAR)
 
-            with open("img_resize_py.txt", "w") as f:
+            img = img.transpose((2, 0, 1))
+
+            with open("img_transpose_py.txt", "w") as f:
                 for i in range(img.shape[0]):
                     for j in range(img.shape[1]):
                         for k in range(img.shape[2]):
