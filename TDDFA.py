@@ -105,6 +105,7 @@ class TDDFA(object):
                         for k in range(inp.shape[3]):
                             f.write("{:.6f}".format(float(inp[0, i, j, k])))
                             f.write("\n")
+                            # inp[0, i, j, k] = 0.0
 
             if self.gpu_mode:
                 inp = inp.cuda(device=self.gpu_id)
@@ -117,8 +118,16 @@ class TDDFA(object):
             else:
                 param = self.model(inp)
 
-            param = param.squeeze().cpu().numpy().flatten().astype(np.float32)
+            print('input', inp)    
             print('output', param)
+
+            # with open("out_cpp.bin", "rb") as f:
+            #     c = f.read()
+            #     for i in range(62):
+            #         print(float(c[i*4:i*4+4]))
+
+            param = param.squeeze().cpu().numpy().flatten().astype(np.float32)
+            # param = [0.37304688, -0.16223145, 0.54638672, 0.11541748, 0.3269043, -1.8251953, -0.32250977, -1.9726562, -0.49707031, 0.24597168, 0.36010742, -0, 1.0419922, 0.34863281, -0.51513672, -0.023498535, 0.44042969, -0.26513672, 0.44970703, -0.14526367, 0.69970703, 0.011856079, 0.024917603, -0.10998535, 0.22045898, 0.13867188, 0.17626953, 0.051269531, -0.13916016, 0.1071167, 0.19494629, 0.032714844, 0.07244873, -0.11804199, -0.15197754, 0.25317383, -0.24682617, 0.12792969, 0.10931396, -0.13061523, -0.11743164, -0.12084961, -0.0094146729, -0.049194336, 0.088378906, -0.22314453, 0.1854248, 0.0088348389, 0.21130371, -0.19946289, -0.052490234, 0.105896, 0.78857422, -0.79248047, 0.42871094, -0.38549805, -0.21655273, 0.61865234, 0.53417969, 0.51757812, 0.22998047, 0.58984375]
             param = param * self.param_std + self.param_mean  # re-scale
             param_lst.append(param)
 
@@ -134,6 +143,7 @@ class TDDFA(object):
                 pts3d = recon_dense(param, roi_box, size)
             else:
                 pts3d = recon_sparse(param, roi_box, size)  # 68 pts
+                print(pts3d)
 
             ver_lst.append(pts3d)
 

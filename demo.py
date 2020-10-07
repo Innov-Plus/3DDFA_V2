@@ -35,7 +35,7 @@ def main(args):
 
     # Detect faces, get 3DMM params and roi boxes
     boxes = face_boxes(img)
-    boxes = [[228, 103, 467, 391, 1.0]]
+    # boxes = [[228, 103, 467, 391, 1.0]]
     # print(boxes)
     n = len(boxes)
     print(f'Detect {n} faces')
@@ -56,27 +56,27 @@ def main(args):
 
     ver_lst = tddfa.recon_vers(param_lst, roi_box_lst, dense_flag=dense_flag)
 
-    # if args.opt == '2d_sparse':
-    #     draw_landmarks(img, ver_lst, show_flag=args.show_flag, dense_flag=dense_flag, wfp=wfp)
-    # elif args.opt == '2d_dense':
-    #     draw_landmarks(img, ver_lst, show_flag=args.show_flag, dense_flag=dense_flag, wfp=wfp)
-    # elif args.opt == '3d':
-    #     render(img, ver_lst, alpha=0.6, show_flag=args.show_flag, wfp=wfp)
-    # elif args.opt == 'depth':
-    #     # if `with_bf_flag` is False, the background is black
-    #     depth(img, ver_lst, show_flag=args.show_flag, wfp=wfp, with_bg_flag=True)
-    # elif args.opt == 'pncc':
-    #     pncc(img, ver_lst, show_flag=args.show_flag, wfp=wfp, with_bg_flag=True)
-    # elif args.opt == 'uv_tex':
-    #     uv_tex(img, ver_lst, show_flag=args.show_flag, wfp=wfp)
-    # elif args.opt == 'pose':
-    #     viz_pose(img, param_lst, ver_lst, show_flag=args.show_flag, wfp=wfp)
-    # elif args.opt == 'ply':
-    #     ser_to_ply(ver_lst, height=img.shape[0], wfp=wfp)
-    # elif args.opt == 'obj':
-    #     ser_to_obj(img, ver_lst, height=img.shape[0], wfp=wfp)
-    # else:
-    #     raise ValueError(f'Unknown opt {args.opt}')
+    if args.opt == '2d_sparse':
+        draw_landmarks(img, ver_lst, show_flag=args.show_flag, dense_flag=dense_flag, wfp=wfp)
+    elif args.opt == '2d_dense':
+        draw_landmarks(img, ver_lst, show_flag=args.show_flag, dense_flag=dense_flag, wfp=wfp)
+    elif args.opt == '3d':
+        render(img, ver_lst, alpha=0.6, show_flag=args.show_flag, wfp=wfp)
+    elif args.opt == 'depth':
+        # if `with_bf_flag` is False, the background is black
+        depth(img, ver_lst, show_flag=args.show_flag, wfp=wfp, with_bg_flag=True)
+    elif args.opt == 'pncc':
+        pncc(img, ver_lst, show_flag=args.show_flag, wfp=wfp, with_bg_flag=True)
+    elif args.opt == 'uv_tex':
+        uv_tex(img, ver_lst, show_flag=args.show_flag, wfp=wfp)
+    elif args.opt == 'pose':
+        viz_pose(img, param_lst, ver_lst, show_flag=args.show_flag, wfp=wfp)
+    elif args.opt == 'ply':
+        ser_to_ply(ver_lst, height=img.shape[0], wfp=wfp)
+    elif args.opt == 'obj':
+        ser_to_obj(img, ver_lst, height=img.shape[0], wfp=wfp)
+    else:
+        raise ValueError(f'Unknown opt {args.opt}')
 
 
 if __name__ == '__main__':
