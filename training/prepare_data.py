@@ -1,4 +1,4 @@
-from utils.functions import draw_landmarks, get_suffix
+from utils.functions import draw_landmarks, get_suffix, parse_roi_box_from_landmark
 
 from scipy.io import loadmat
 from math import cos, sin, atan2, asin, sqrt
@@ -77,6 +77,7 @@ def angle2matrix(phi, gamma, theta):
 
 def load_image_and_its_params(img_path, mat_path):
   img = cv2.imread(img_path)
+  assert (img.shape[0] == img.shape[1])
   data = loadmat(mat_path)
 
   # Load 40 shape parameters
@@ -89,7 +90,7 @@ def load_image_and_its_params(img_path, mat_path):
   P[:, :3] = angle2matrix(data['Pose_Para'][0][0], data['Pose_Para'][0][1],
                           data['Pose_Para'][0][2])
   P[0, 3] = data['Pose_Para'][0][3]
-  P[1, 3] = data['Pose_Para'][0][4]
+  P[1, 3] = img.shape[1] - data['Pose_Para'][0][4]
   P[2, 3] = data['Pose_Para'][0][5]
 
   # Put together P, shape and exp params
