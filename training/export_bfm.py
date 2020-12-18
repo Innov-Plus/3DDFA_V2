@@ -32,7 +32,8 @@ def load_origininal_bfm(bfm_shape_mat_file, bfm_exp_mat_file):
     new_keypoints[i * 3 + 1] = int((keypoints[i] - 1) * 3 + 1)
     new_keypoints[i * 3 + 2] = int((keypoints[i] - 1) * 3 + 2)
 
-  u_base = bfm_shape_original_model['mu_shape'] + bfm_exp_original_model['mu_exp']
+  u_base = bfm_shape_original_model['mu_shape'] + bfm_exp_original_model[
+      'mu_exp']
   u_base = u_base[new_keypoints]
   w_shp_base = bfm_shape_original_model['w'][new_keypoints]
   w_shp_base = w_shp_base[:, :40]
@@ -54,6 +55,6 @@ if __name__ == "__main__":
       '/home/innovplus/Dream/Projects/Data/300W_LP/Code/ModelGeneration/Model_Exp.mat'
   )
 
-  assert(u_3DDFA.all() == u_ref.all())
-  assert(w_shp_3DDFA.all() == w_shp_ref.all())
-  assert(w_exp_3DDFA.all() == w_exp_ref.all())
+  assert (u_3DDFA.all() == u_ref.all())
+  assert (w_shp_3DDFA.all() == w_shp_ref.all())
+  assert (w_exp_3DDFA.all() == w_exp_ref.all())
