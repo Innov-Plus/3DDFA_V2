@@ -18,9 +18,7 @@ if __name__ == "__main__":
 
   R, offset, alpha_shp, alpha_exp = _parse_param(img_params)
 
-  new_offset = [[0], [450], [0]] + offset * [[1], [-1], [1]]
-
   pts3d = scale * R @ (u_ref + w_shp_ref @ alpha_shp + w_exp_ref @ alpha_exp). \
-                    reshape(3, -1, order='F') + new_offset
+                    reshape(3, -1, order='F') + offset
 
   draw_landmarks(img, [pts3d], show_flag=True, dense_flag=False, wfp=None)
