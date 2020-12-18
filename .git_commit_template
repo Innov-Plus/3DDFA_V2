@@ -1,0 +1,20 @@
+##########LIMIT LENGTH OF EACH LINE TO 70 CHARACTERS#################
+# <TYPE>: (If applied, this commit will...) <subject>
+
+# Type can be 
+#    FEATURE     (new feature)
+#    FIX      (bug fix)
+#    REFACTOR (refactoring production code)
+#    STYLE    (formatting, missing semi colons, etc; no code change)
+#    DOCS     (changes to documentation)
+#    TEST     (adding or refactoring tests; no production code change)
+#    CHORE    (updating grunt tasks etc; no production code change)
+
+##########LIMIT LENGTH OF EACH LINE TO 70 CHARACTERS#################
+# Problem, Task, Reason for Commit
+
+##########LIMIT LENGTH OF EACH LINE TO 70 CHARACTERS#################
+# Solution or List of Changes
+
+##########LIMIT LENGTH OF EACH LINE TO 70 CHARACTERS#################
+# Special instructions, testing steps, rake, todo, etc
