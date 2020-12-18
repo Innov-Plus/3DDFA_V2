@@ -1,4 +1,6 @@
 from utils.functions import draw_landmarks, get_suffix, parse_roi_box_from_landmark
+from utils.tddfa_util import _parse_param
+from training.export_bfm import load_origininal_bfm
 
 from scipy.io import loadmat
 from math import cos, sin, atan2, asin, sqrt
@@ -100,6 +102,47 @@ def load_image_and_its_params(img_path, mat_path):
   scale = data['Pose_Para'][0][6]
 
   return img, img_params, scale
+
+
+class CustomBFMModel(object):
+
+  def __init__(self):
+    self.u_base, self.w_shp_base, self.w_exp_base = load_origininal_bfm(
+        '/home/innovplus/Dream/Projects/Data/300W_LP/Code/ModelGeneration/Model_Shape.mat',
+        '/home/innovplus/Dream/Projects/Data/300W_LP/Code/ModelGeneration/Model_Exp.mat'
+    )
+
+
+class Image3DDFA():
+
+  def __init__(self, img_path, mat_path):
+    self.img, self.img_params, self.scale = load_image_and_its_params(
+        img_path, mat_path)
+
+  def calculate68Points(self, customBFMModel):
+    self.R, self.offset, self.alpha_shp, self.alpha_exp = _parse_param(
+        self.img_params)
+
+    self.pts3d = self.scale * self.R @ (
+        customBFMModel.u_base + customBFMModel.w_shp_base @ self.alpha_shp +
+        customBFMModel.w_exp_base @ self.alpha_exp).reshape(
+            3, -1, order='F') + self.offset
+
+  def preprocess(self, customBFMModel):
+    # Crop face
+    roi_box = parse_roi_box_from_landmark(self.pts3d)
+
+    # self.offset[0] = self.offset[0] - roi_box[0]
+    # self.offset[1] = self.offset[1] - roi_box[1]
+
+    self.pts3d = self.scale * self.R @ (
+        customBFMModel.u_base + customBFMModel.w_shp_base @ self.alpha_shp +
+        customBFMModel.w_exp_base @ self.alpha_exp).reshape(
+            3, -1, order='F') + self.offset
+
+    # Resize to 120x120
+
+    return roi_box
 
 
 if __name__ == "__main__":
